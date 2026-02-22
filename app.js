@@ -1,5 +1,12 @@
 require("dotenv").config();
 
+if (!process.env.ATLASDB_URL) {
+  console.error(" ATLASDB_URL not defined");
+}
+
+if (!process.env.SECRET) {
+  console.error("SECRET not defined");
+}
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -45,14 +52,13 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsMate);
 
-const store = new MongoStore({
-  mongoUrl: dbUrl,
+const store = MongoStore.create({
+  mongoUrl: process.env.ATLASDB_URL,  // make sure it is defined
   crypto: {
     secret: process.env.SECRET,
   },
   touchAfter: 24 * 3600,
 });
-
 store.on("error",(err)=>{
   console.log("Errore in mongo session store",err);
 });
@@ -76,6 +82,7 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -85,6 +92,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   res.locals.currUser = req.user;   // 
   next();
+  
 });
 
 
@@ -111,9 +119,8 @@ app.use((err, req, res, next) => {
 });
 
 // SERVER START
-const PORT =  3000;
-const server = app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-
