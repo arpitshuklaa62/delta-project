@@ -7,6 +7,7 @@ const listingSchema = new Schema({
     type: String,
     required: true,
   },
+
   description: String,
 
   image: {
@@ -18,7 +19,25 @@ const listingSchema = new Schema({
   location: String,
   country: String,
 
-  //  ADD THIS PART
+  // ✅ ADD CATEGORY (FILTER KE LIYE)
+  category: {
+    type: String,
+    enum: [
+      "Trending",
+      "Rooms",
+      "Iconic Cities",
+      "Mountains",
+      "Castles",
+      "Amazing Pools",
+      "Camping",
+      "Farms",
+      "Arctic",
+      "Domes",
+      "Boats"
+    ],
+  },
+
+  // 🌍 GEO LOCATION
   geometry: {
     type: {
       type: String,
@@ -29,6 +48,7 @@ const listingSchema = new Schema({
     },
   },
 
+  // ⭐ REVIEWS
   reviews: [
     {
       type: Schema.Types.ObjectId,
@@ -36,14 +56,14 @@ const listingSchema = new Schema({
     },
   ],
 
+  // 👤 OWNER
   owner: {
     type: Schema.Types.ObjectId,
     ref: "User",
   },
 });
 
-
-//  Delete related reviews when listing deleted
+// 🧹 DELETE RELATED REVIEWS
 listingSchema.post("findOneAndDelete", async (listing) => {
   if (listing) {
     await Review.deleteMany({ _id: { $in: listing.reviews } });

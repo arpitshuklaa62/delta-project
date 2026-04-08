@@ -3,16 +3,20 @@ const Review=require("./models/review");
 
 const ExpressError = require("./utils/expresserror.js");
 const { listingSchema,reviewSchema } = require("./schema.js");
-
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
+
+    if (req.xhr || req.headers.accept?.includes("application/json")) {
+      return res.status(401).json({ error: "Login required" });
+    }
+
     req.session.redirectUrl = req.originalUrl;
-    req.flash("error", "You must be logged in to do that!");
+    req.flash("error", "You must be logged in!");
     return res.redirect("/login");
   }
-    next();
-};
 
+  next();
+};
 module.exports.saveRedirectUrl = (req, res, next) => {
 
   if (req.session.redirectUrl) {
@@ -57,17 +61,14 @@ module.exports. validateReview=(req,res,next)=>{
 module.exports.isReviewAuthor = async (req, res, next) => {  
   let { id, reviewId } = req.params;   // ✅ correct params
   let review = await Review.findById(reviewId);
-
   if (!review) {
     req.flash("error", "Review not found!");
     return res.redirect(`/listings/${id}`);
   }
-
   if (!review.author || !review.author.equals(req.user._id)) {
     req.flash("error", "You are not the author of this review!");
     return res.redirect(`/listings/${id}`);
   }
-
   next();  
 };
 

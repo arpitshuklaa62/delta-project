@@ -6,14 +6,19 @@ const { saveRedirectUrl } = require("../middleware");
 
 const userController = require("../controllers/user");
 
+// ✅ HOME ROUTE (IMPORTANT FIX)
+router.get("/", (req, res) => {
+  res.redirect("/listings"); // ya res.render("home") agar home page hai
+});
 
-
+// SIGNUP
 router.route("/signup")
 .get(userController.renderSignupForm)
-.post( wrapAsync(userController.signup));
+.post(wrapAsync(userController.signup));
 
+// LOGIN
 router.route("/login")
-.get( userController.renderLoginForm)
+.get(userController.renderLoginForm)
 .post(
   saveRedirectUrl,
   passport.authenticate("local", {
@@ -23,7 +28,7 @@ router.route("/login")
   userController.login
 );
 
+// LOGOUT
 router.get("/logout", userController.logout);
 
 module.exports = router;
-
