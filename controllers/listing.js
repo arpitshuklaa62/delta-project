@@ -55,13 +55,13 @@ module.exports.createListings = async (req, res) => {
 
     const listingData = req.body.listing;
 
-    // ❌ agar data hi nahi aaya
+    //  agar data hi nahi aaya
     if (!listingData) {
       req.flash("error", "Invalid listing data!");
       return res.redirect("/listings/new");
     }
 
-    // 🌍 GEO API CALL
+    //  GEO API CALL
     const geoResponse = await fetch(
       `https://nominatim.openstreetmap.org/search?q=${listingData.location}&format=json&limit=1`,
       {
@@ -73,13 +73,13 @@ module.exports.createListings = async (req, res) => {
 
     const geoData = await geoResponse.json();
 
-    // ❌ invalid location
+    //  invalid location
     if (!geoData || geoData.length === 0) {
       req.flash("error", "Location not found!");
       return res.redirect("/listings/new");
     }
 
-    // ✅ coordinates extract
+    //  coordinates extract
     const lat = parseFloat(geoData[0].lat);
     const lon = parseFloat(geoData[0].lon);
 
@@ -88,11 +88,11 @@ module.exports.createListings = async (req, res) => {
       coordinates: [lon, lat],
     };
 
-    // ✅ new listing
+    //  new listing
     const newListing = new Listing(listingData);
     newListing.owner = req.user._id;
 
-    // ✅ image upload (if exists)
+    //  image upload (if exists)
     if (req.file) {
       newListing.image = {
         url: req.file.path,
@@ -102,7 +102,7 @@ module.exports.createListings = async (req, res) => {
 
     await newListing.save();
 
-    // ✅ SUCCESS FLASH
+    //  SUCCESS FLASH
     req.flash("success", "Successfully created a new listing!");
     res.redirect(`/listings/${newListing._id}`);
 

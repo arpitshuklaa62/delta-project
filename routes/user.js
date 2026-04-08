@@ -6,7 +6,7 @@ const { saveRedirectUrl } = require("../middleware");
 
 const userController = require("../controllers/user");
 
-// ✅ HOME ROUTE (IMPORTANT FIX)
+//  HOME ROUTE (IMPORTANT FIX)
 router.get("/", (req, res) => {
   res.redirect("/listings"); // ya res.render("home") agar home page hai
 });

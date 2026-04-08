@@ -19,7 +19,7 @@ const listingSchema = new Schema({
   location: String,
   country: String,
 
-  // ✅ ADD CATEGORY (FILTER KE LIYE)
+  //  ADD CATEGORY (FILTER KE LIYE)
   category: {
     type: String,
     enum: [
@@ -37,7 +37,7 @@ const listingSchema = new Schema({
     ],
   },
 
-  // 🌍 GEO LOCATION
+  //  GEO LOCATION
   geometry: {
     type: {
       type: String,
@@ -48,7 +48,7 @@ const listingSchema = new Schema({
     },
   },
 
-  // ⭐ REVIEWS
+  //  REVIEWS
   reviews: [
     {
       type: Schema.Types.ObjectId,
@@ -56,14 +56,14 @@ const listingSchema = new Schema({
     },
   ],
 
-  // 👤 OWNER
+  //  OWNER
   owner: {
     type: Schema.Types.ObjectId,
     ref: "User",
   },
 });
 
-// 🧹 DELETE RELATED REVIEWS
+//  DELETE RELATED REVIEWS
 listingSchema.post("findOneAndDelete", async (listing) => {
   if (listing) {
     await Review.deleteMany({ _id: { $in: listing.reviews } });
