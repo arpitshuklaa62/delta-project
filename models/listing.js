@@ -1,74 +1,66 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const Review = require("./review.js");
 
-const listingSchema = new Schema({
+const listingSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    required: true
   },
+  location: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+
+  // Hostel fields
+  gender: {
+    type: String,
+    enum: ["Boys", "Girls", "Both"],
+    required: true
+  },
+  roomType: {
+    type: String,
+    enum: ["Single", "Double", "Triple"],
+    required: true
+  },
+
+  // ✅ FIXED (only once + default added)
+  amenities: {
+    type: [String],
+    default: []
+  },
+  reviews: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Review"
+  }
+],
+
+  images: [{
+    url: String,
+    filename: String
+  }],
 
   description: String,
 
-  image: {
-    url: String,
-    filename: String,
-  },
-
-  price: Number,
-  location: String,
-  country: String,
-
-  //  ADD CATEGORY (FILTER KE LIYE)
-  category: {
-    type: String,
-    enum: [
-      "Trending",
-      "Rooms",
-      "Iconic Cities",
-      "Mountains",
-      "Castles",
-      "Amazing Pools",
-      "Camping",
-      "Farms",
-      "Arctic",
-      "Domes",
-      "Boats"
-    ],
-  },
-
-  //  GEO LOCATION
+  // Geometry for maps (GeoJSON format)
   geometry: {
-    type: {
+    geoJsonType: {
       type: String,
-      enum: ["Point"],
+      enum: ['Point']
     },
-    coordinates: {
-      type: [Number], // [longitude, latitude]
-    },
+    coordinates: [Number]
   },
 
-  //  REVIEWS
-  reviews: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Review",
-    },
-  ],
-
-  //  OWNER
+  // Owner
   owner: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-});
-
-//  DELETE RELATED REVIEWS
-listingSchema.post("findOneAndDelete", async (listing) => {
-  if (listing) {
-    await Review.deleteMany({ _id: { $in: listing.reviews } });
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
   }
-});
 
-const Listing = mongoose.model("Listing", listingSchema);
-module.exports = Listing;
+}, { timestamps: true });
+
+
+module.exports = mongoose.model("Listing", listingSchema);

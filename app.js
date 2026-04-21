@@ -24,8 +24,9 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
-//  DATABASE 
+// ================= DATABASE =================
 const dbUrl = process.env.ATLASDB_URL;
+mongoose.set("strictPopulate", false);
 
 async function main() {
   await mongoose.connect(dbUrl);
@@ -34,7 +35,7 @@ main()
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("DB Connection Error:", err));
 
-//  MIDDLEWARE 
+// ================= MIDDLEWARE =================
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
@@ -43,7 +44,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsMate);
 
-//  SESSION CONFIG 
+// ================= SESSION =================
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   crypto: {
@@ -60,7 +61,7 @@ const sessionOptions = {
   store,
   secret: process.env.SECRET,
   resave: false,
-  saveUninitialized: false, // 🔥 FIXED
+  saveUninitialized: false,
   cookie: {
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -71,7 +72,7 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
-//  PASSPORT 
+// ================= PASSPORT =================
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -79,7 +80,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-//  GLOBAL VARIABLES 
+// ================= GLOBAL VARIABLES =================
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -87,37 +88,36 @@ app.use((req, res, next) => {
   next();
 });
 
+// ================= TEST ROUTE =================
 app.get("/test", (req, res) => {
   req.flash("success", "Flash working!");
-  res.redirect("/listings");
+  res.redirect("/listing"); // ✅ FIXED
 });
 
-//  ROUTES 
+// ================= ROUTES =================
 const listingRouter = require("./routes/listing.js");
-const userRouter = require("./routes/user.js");
 const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
 
-//  IMPORTANT ORDER
+// ✅ IMPORTANT ORDER
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/listings", listingRouter);
 app.use("/", userRouter);
 
-//  404 HANDLER 
+// ================= 404 HANDLER =================
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
 });
-
-//  ERROR HANDLER 
+// ================= ERROR HANDLER =================
 app.use((err, req, res, next) => {
   const { statusCode = 500, message = "Something went wrong!" } = err;
   console.error(err);
   res.status(statusCode).render("error.ejs", { message });
 });
 
-
-//  SERVER 
+// ================= SERVER =================
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`); // ✅ FIXED
 });

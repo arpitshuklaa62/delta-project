@@ -2,76 +2,96 @@
 
 <div class="row mt-3">
   <div class="col-8 offset-2">
-    <h3>Create a New Listing</h3>
-    <br>
+    <h3>Add New Hostel</h3>
 
     <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
 
       <!-- Title -->
       <div class="mb-3">
-        <label class="form-label">Title</label>
-        <input name="listing[title]" placeholder="Add a catchy title" type="text" class="form-control" required />
-        <div class="valid-feedback">Looks good!</div>
+        <label class="form-label">Hostel Name</label>
+        <input name="listing[title]" placeholder="Enter hostel name" type="text" class="form-control" required />
       </div>
 
       <!-- Description -->
       <div class="mb-3">
         <label class="form-label">Description</label>
         <textarea name="listing[description]" class="form-control" required></textarea>
-        <div class="invalid-feedback">Please enter a short description</div>
       </div>
 
-      <!-- CATEGORY (NEW ADD) -->
+      <!-- Images -->
       <div class="mb-3">
-        <label class="form-label">Category</label>
-        <select name="listing[category]" class="form-control" required>
-          <option value="">Select Category</option>
-          <option value="Trending">Trending</option>
-          <option value="Rooms">Rooms</option>
-          <option value="Iconic Cities">Iconic Cities</option>
-          <option value="Mountains">Mountains</option>
-          <option value="Castles">Castles</option>
-          <option value="Amazing Pools">Amazing Pools</option>
-          <option value="Camping">Camping</option>
-          <option value="Farms">Farms</option>
-          <option value="Arctic">Arctic</option>
-          <option value="Domes">Domes</option>
-          <option value="Boats">Boats</option>
-        </select>
-      </div>
-
-      <!-- Image Upload -->
-      <div class="mb-3">
-        <label class="form-label">Upload Listing Image</label>
-        <input name="image" type="file" class="form-control"/>
+        <label class="form-label">Upload Images</label>
+        <input name="images" type="file" class="form-control" multiple/>
       </div> 
 
-      <!-- Price & Country -->
-      <div class="row">
-        <div class="mb-3 col-md-4">
-          <label class="form-label">Price</label>
-          <input name="listing[price]" placeholder="1200" type="number" class="form-control" required />
-          <div class="invalid-feedback">Enter a valid price</div>
-        </div>
-
-        <div class="mb-3 col-md-8">
-          <label class="form-label">Country</label>
-          <input name="listing[country]" placeholder="India" type="text" class="form-control" required/>
-          <div class="invalid-feedback">Enter valid country</div>
-        </div>
-      </div>  
+      <!-- Price -->
+      <div class="mb-3">
+        <label class="form-label">Price (per month)</label>
+        <input name="listing[price]" placeholder="5000" type="number" class="form-control" required />
+      </div>
 
       <!-- Location -->
       <div class="mb-3">
         <label class="form-label">Location</label>
-        <input name="listing[location]" placeholder="Jaipur, Rajasthan" type="text" class="form-control" required/>
-        <div class="invalid-feedback">Enter valid location</div>
+        <input name="listing[location]" placeholder="Indore, MP" type="text" class="form-control" required/>
+      </div>
+
+      <!-- Country (IMPORTANT - backend me use ho raha hai) -->
+      <div class="mb-3">
+        <label class="form-label">Country</label>
+        <input name="listing[country]" placeholder="India" type="text" class="form-control" required/>
+      </div>
+
+      <!-- Gender -->
+      <div class="mb-3">
+        <label class="form-label">Gender Allowed</label>
+        <select name="listing[gender]" class="form-control" required>
+          <option value="">Select</option>
+          <option value="Boys">Boys</option>
+          <option value="Girls">Girls</option>
+          <option value="Both">Both</option>
+        </select>
+      </div>
+
+      <!-- Room Type -->
+      <div class="mb-3">
+        <label class="form-label">Room Type</label>
+        <select name="listing[roomType]" class="form-control" required>
+          <option value="">Select</option>
+          <option value="Single">Single</option>
+          <option value="Double">Double</option>
+          <option value="Triple">Triple</option>
+        </select>
+      </div>
+
+      <!-- Amenities -->
+      <div class="mb-3">
+        <label class="form-label">Amenities</label><br>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="listing[amenities]" value="WiFi">
+          <label class="form-check-label">WiFi</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="listing[amenities]" value="AC">
+          <label class="form-check-label">AC</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="listing[amenities]" value="Mess">
+          <label class="form-check-label">Mess</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="listing[amenities]" value="Parking">
+          <label class="form-check-label">Parking</label>
+        </div>
       </div>
 
       <!-- Submit -->
-      <button class="btn btn-dark add-btn mt-3">Add</button>
+      <button class="btn btn-dark mt-3">Add Hostel</button>
 
     </form>
-    <br>
   </div>
 </div>

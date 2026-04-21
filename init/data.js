@@ -1,355 +1,242 @@
-//yaha pe chat ka data define kiya hai
-
-
-const sampleListings = [
+const indoreHostels = [
   {
-    title: "Cozy Beachfront Cottage",
-    description:
-      "Escape to this charming beachfront cottage for a relaxing getaway. Enjoy stunning ocean views and easy access to the beach.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHRyYXZlbHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1500,
-    location: "Malibu",
-    country: "United States",
+    title: "Shree Boys Hostel",
+    description: "Affordable hostel near DAVV University with good food and WiFi.",
+    location: "Takshashila Campus, Indore",
+    price: 4500,
+    gender: "Boys",
+    roomType: "Double",
+    amenities: ["WiFi", "Mess", "Laundry"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8780, 22.6910] },
+    images: [{ url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267" }]
   },
   {
-    title: "Modern Loft in Downtown",
-    description:
-        "Stay in the heart of the city in this stylish loft apartment. Perfect for urban explorers!",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHRyYXZlbHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1200,
-    location: "New York City",
-    country: "United States",
+    title: "Elite Girls PG",
+    description: "Safe and secure girls PG near Holkar Science College.",
+    location: "Vijay Nagar, Indore",
+    price: 7000,
+    gender: "Girls",
+    roomType: "Single",
+    amenities: ["WiFi", "AC", "Security"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8900, 22.7500] },
+    images: [{ url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2" }]
   },
   {
-    title: "Mountain Retreat",
-    description:
-      "Unplug and unwind in this peaceful mountain cabin. Surrounded by nature, it's a perfect place to recharge.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8aG90ZWxzfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1000,
-    location: "Aspen",
-    country: "United States",
-  },
-  {
-    title: "Historic Villa in Tuscany",
-    description:
-      "Experience the charm of Tuscany in this beautifully restored villa. Explore the rolling hills and vineyards.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aG90ZWxzfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 2500,
-    location: "Florence",
-    country: "Italy",
-  },
-  {
-    title: "Secluded Treehouse Getaway",
-    description:
-      "Live among the treetops in this unique treehouse retreat. A true nature lover's paradise.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGhvdGVsc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 800,
-    location: "Portland",
-    country: "United States",
-  },
-  {
-    title: "Beachfront Paradise",
-    description:
-      "Step out of your door onto the sandy beach. This beachfront condo offers the ultimate relaxation.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGhvdGVsc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 2000,
-    location: "Cancun",
-    country: "Mexico",
-  },
-  {
-    title: "Rustic Cabin by the Lake",
-    description:
-      "Spend your days fishing and kayaking on the serene lake. This cozy cabin is perfect for outdoor enthusiasts.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vdW50YWlufGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 900,
-    location: "Lake Tahoe",
-    country: "United States",
-  },
-  {
-    title: "Luxury Penthouse with City Views",
-    description:
-      "Indulge in luxury living with panoramic city views from this stunning penthouse apartment.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1622396481328-9b1b78cdd9fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2t5JTIwdmFjYXRpb258ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 3500,
-    location: "Los Angeles",
-    country: "United States",
-  },
-  {
-    title: "Ski-In/Ski-Out Chalet",
-    description:
-      "Hit the slopes right from your doorstep in this ski-in/ski-out chalet in the Swiss Alps.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1502784444187-359ac186c5bb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHNreSUyMHZhY2F0aW9ufGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 3000,
-    location: "Verbier",
-    country: "Switzerland",
-  },
-  {
-    title: "Safari Lodge in the Serengeti",
-    description:
-      "Experience the thrill of the wild in a comfortable safari lodge. Witness the Great Migration up close.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjl8fG1vdW50YWlufGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
+    title: "City Boys Hostel",
+    description: "Budget hostel near IPS Academy with basic facilities.",
+    location: "Bhawarkua, Indore",
     price: 4000,
-    location: "Serengeti National Park",
-    country: "Tanzania",
-  },
+    gender: "Boys",
+    roomType: "Triple",
+    amenities: ["Mess", "WiFi"],
+    geometry: { geoJsonType: "Point", coordinates: [75.9300, 22.7200] },
+    images: [{ url: "https://images.unsplash.com/photo-1505691723518-36a5ac3b2e0c" }]
+  }
+,
   {
-    title: "Historic Canal House",
-    description:
-      "Stay in a piece of history in this beautifully preserved canal house in Amsterdam's iconic district.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2FtcGluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1800,
-    location: "Amsterdam",
-    country: "Netherlands",
-  },
+    title: "Royal Girls Hostel",
+    description: "Premium girls hostel near Prestige College.",
+    location: "Scheme 54, Indore",
+    price: 8500,
+    gender: "Girls",
+    roomType: "Single",
+    amenities: ["AC", "WiFi", "Laundry", "Security"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8200, 22.7300] },
+    images: [{ url: "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6" }]
+  }
+,
   {
-    title: "Private Island Retreat",
-    description:
-      "Have an entire island to yourself for a truly exclusive and unforgettable vacation experience.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1618140052121-39fc6db33972?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bG9kZ2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 10000,
-    location: "Fiji",
-    country: "Fiji",
-  },
-  {
-    title: "Charming Cottage in the Cotswolds",
-    description:
-      "Escape to the picturesque Cotswolds in this quaint and charming cottage with a thatched roof.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1602088113235-229c19758e9f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmVhY2glMjB2YWNhdGlvbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1200,
-    location: "Cotswolds",
-    country: "United Kingdom",
-  },
-  {
-    title: "Historic Brownstone in Boston",
-    description:
-      "Step back in time in this elegant historic brownstone located in the heart of Boston.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1533619239233-6280475a633a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHNreSUyMHZhY2F0aW9ufGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 2200,
-    location: "Boston",
-    country: "United States",
-  },
-  {
-    title: "Beachfront Bungalow in Bali",
-    description:
-      "Relax on the sandy shores of Bali in this beautiful beachfront bungalow with a private pool.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1602391833977-358a52198938?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fGNhbXBpbmd8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1800,
-    location: "Bali",
-    country: "Indonesia",
-  },
-  {
-    title: "Mountain View Cabin in Banff",
-    description:
-      "Enjoy breathtaking mountain views from this cozy cabin in the Canadian Rockies.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1521401830884-6c03c1c87ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGxvZGdlfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1500,
-    location: "Banff",
-    country: "Canada",
-  },
-  {
-    title: "Art Deco Apartment in Miami",
-    description:
-      "Step into the glamour of the 1920s in this stylish Art Deco apartment in South Beach.",
-    image: {
-      filename: "listingimage",
-      url: "https://plus.unsplash.com/premium_photo-1670963964797-942df1804579?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGxvZGdlfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1600,
-    location: "Miami",
-    country: "United States",
-  },
-  {
-    title: "Tropical Villa in Phuket",
-    description:
-      "Escape to a tropical paradise in this luxurious villa with a private infinity pool in Phuket.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1470165301023-58dab8118cc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGxvZGdlfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 3000,
-    location: "Phuket",
-    country: "Thailand",
-  },
-  {
-    title: "Historic Castle in Scotland",
-    description:
-      "Live like royalty in this historic castle in the Scottish Highlands. Explore the rugged beauty of the area.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1585543805890-6051f7829f98?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGJlYWNoJTIwdmFjYXRpb258ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 4000,
-    location: "Scottish Highlands",
-    country: "United Kingdom",
-  },
-  {
-    title: "Desert Oasis in Dubai",
-    description:
-      "Experience luxury in the middle of the desert in this opulent oasis in Dubai with a private pool.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHViYWl8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
-    },
+    title: "Student Hub Hostel",
+    description: "Popular boys hostel near SGSITS college.",
+    location: "Race Course Road, Indore",
     price: 5000,
-    location: "Dubai",
-    country: "United Arab Emirates",
-  },
+    gender: "Boys",
+    roomType: "Double",
+    amenities: ["WiFi", "Mess"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8600, 22.7100] },
+    images: [{ url: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5" }]
+  }
+,
   {
-    title: "Rustic Log Cabin in Montana",
-    description:
-      "Unplug and unwind in this cozy log cabin surrounded by the natural beauty of Montana.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1586375300773-8384e3e4916f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGxvZGdlfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1100,
-    location: "Montana",
-    country: "United States",
-  },
+    title: "Green View PG",
+    description: "Peaceful PG near IET DAVV campus.",
+    location: "Khandwa Road, Indore",
+    price: 5200,
+    gender: "Both",
+    roomType: "Double",
+    amenities: ["WiFi", "Garden", "Mess"],
+    geometry: { geoJsonType: "Point", coordinates: [75.9000, 22.6900] },
+    images: [{ url: "https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba" }]
+}
+,
   {
-    title: "Beachfront Villa in Greece",
-    description:
-      "Enjoy the crystal-clear waters of the Mediterranean in this beautiful beachfront villa on a Greek island.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8dmlsbGF8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 2500,
-    location: "Mykonos",
-    country: "Greece",
-  },
+    title: "Sunrise Boys Hostel",
+    description: "Near IPS Academy with study-friendly environment.",
+    location: "Bhawarkua, Indore",
+    price: 4200,
+    gender: "Boys",
+    roomType: "Single",
+    amenities: ["WiFi", "Study Room"],
+    geometry: { geoJsonType: "Point", coordinates: [75.9350, 22.7150] },
+    images: [{ url: "https://images.unsplash.com/photo-1524230572899-a752b3835840" }]
+}
+,
   {
-    title: "Eco-Friendly Treehouse Retreat",
-    description:
-      "Stay in an eco-friendly treehouse nestled in the forest. It's the perfect escape for nature lovers.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1488462237308-ecaa28b729d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8c2t5JTIwdmFjYXRpb258ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 750,
-    location: "Costa Rica",
-    country: "Costa Rica",
-  },
+    title: "Lakshmi Girls PG",
+    description: "Safe PG near Choithram College.",
+    location: "Manik Bagh, Indore",
+    price: 6800,
+    gender: "Girls",
+    roomType: "Double",
+    amenities: ["WiFi", "Mess", "Security"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8700, 22.7000] },
+    images: [{ url: "https://images.unsplash.com/photo-1505691938895-1758d7feb511" }]
+}
+,
   {
-    title: "Historic Cottage in Charleston",
-    description:
-      "Experience the charm of historic Charleston in this beautifully restored cottage with a private garden.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1587381420270-3e1a5b9e6904?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGxvZGdlfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1600,
-    location: "Charleston",
-    country: "United States",
-  },
+    title: "Metro Boys Hostel",
+    description: "Near Holkar College with transport facility.",
+    location: "AB Road, Indore",
+    price: 4800,
+    gender: "Boys",
+    roomType: "Triple",
+    amenities: ["WiFi", "Mess", "Parking"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8500, 22.7200] },
+    images: [{ url: "https://images.unsplash.com/photo-1560185007-cde436f6a4d0" }]
+}
+,
   {
-    title: "Modern Apartment in Tokyo",
-    description:
-      "Explore the vibrant city of Tokyo from this modern and centrally located apartment.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1480796927426-f609979314bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHRva3lvfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 2000,
-    location: "Tokyo",
-    country: "Japan",
-  },
+    title: "Dream Girls Hostel",
+    description: "Modern hostel near Prestige Engineering College.",
+    location: "Scheme 74, Indore",
+    price: 9000,
+    gender: "Girls",
+    roomType: "Single",
+    amenities: ["AC", "WiFi", "Gym"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8100, 22.7400] },
+    images: [{ url: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85" }]
+}
+,
   {
-    title: "Lakefront Cabin in New Hampshire",
-    description:
-      "Spend your days by the lake in this cozy cabin in the scenic White Mountains of New Hampshire.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1578645510447-e20b4311e3ce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDF8fGNhbXBpbmd8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1200,
-    location: "New Hampshire",
-    country: "United States",
-  },
+    title: "Campus Boys Hostel",
+    description: "Budget-friendly hostel near DAVV Takshashila.",
+    location: "Takshashila Road, Indore",
+    price: 3800,
+    gender: "Boys",
+    roomType: "Triple",
+    amenities: ["Mess", "WiFi"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8750, 22.6850] },
+    images: [{ url: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af" }]
+}
+,
   {
-    title: "Luxury Villa in the Maldives",
-    description:
-      "Indulge in luxury in this overwater villa in the Maldives with stunning views of the Indian Ocean.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bGFrZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 6000,
-    location: "Maldives",
-    country: "Maldives",
-  },
+    title: "Shiv Shakti PG",
+    description: "Near IPS College, good for engineering students.",
+    location: "Bhawarkua, Indore",
+    price: 4600,
+    gender: "Boys",
+    roomType: "Double",
+    amenities: ["WiFi", "Mess"],
+    geometry: { geoJsonType: "Point", coordinates: [75.9320, 22.7180] },
+    images: [{ url: "https://images.unsplash.com/photo-1502005097973-6a7082348e28" }]
+}
+,
   {
-    title: "Ski Chalet in Aspen",
-    description:
-      "Hit the slopes in style with this luxurious ski chalet in the world-famous Aspen ski resort.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGxha2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 4000,
-    location: "Aspen",
-    country: "United States",
-  },
+    title: "Harmony Girls Hostel",
+    description: "Peaceful environment near Choithram Hospital area.",
+    location: "Manik Bagh, Indore",
+    price: 7500,
+    gender: "Girls",
+    roomType: "Single",
+    amenities: ["WiFi", "AC", "Security"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8650, 22.7050] },
+    images: [{ url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4" }]
+}
+,
   {
-    title: "Secluded Beach House in Costa Rica",
-    description:
-      "Escape to a secluded beach house on the Pacific coast of Costa Rica. Surf, relax, and unwind.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhY2glMjBob3VzZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    price: 1800,
-    location: "Costa Rica",
-    country: "Costa Rica",
-  },
+    title: "Prime Boys Hostel",
+    description: "Near SGSITS with modern facilities.",
+    location: "Race Course Road, Indore",
+    price: 5500,
+    gender: "Boys",
+    roomType: "Double",
+    amenities: ["WiFi", "Mess", "Study Hall"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8550, 22.7080] },
+    images: [{ url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7" }]
+}
+,
+  {
+    title: "Comfort Girls PG",
+    description: "Safe PG near Holkar Science College.",
+    location: "Vijay Nagar, Indore",
+    price: 7200,
+    gender: "Girls",
+    roomType: "Double",
+    amenities: ["WiFi", "Mess", "Laundry"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8850, 22.7480] },
+    images: [{ url: "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83" }]
+}
+,
+  {
+    title: "Smart Boys Hostel",
+    description: "Near IET DAVV with study environment.",
+    location: "Khandwa Road, Indore",
+    price: 4100,
+    gender: "Boys",
+    roomType: "Triple",
+    amenities: ["WiFi", "Mess"],
+    geometry: { geoJsonType: "Point", coordinates: [75.9050, 22.6880] },
+    images: [{ url: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa" }]
+}
+,
+  {
+    title: "Elite PG House",
+    description: "Premium PG near Prestige College.",
+    location: "Scheme 54, Indore",
+    price: 9500,
+    gender: "Both",
+    roomType: "Single",
+    amenities: ["AC", "WiFi", "Gym", "Security"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8150, 22.7350] },
+    images: [{ url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6" }]
+}
+,
+  {
+    title: "Study Point Hostel",
+    description: "Best for students near DAVV University.",
+    location: "Takshashila Campus, Indore",
+    price: 4700,
+    gender: "Boys",
+    roomType: "Double",
+    amenities: ["WiFi", "Study Room"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8800, 22.6900] },
+    images: [{ url: "https://images.unsplash.com/photo-1571896349842-33c89424de2d" }]
+}
+,
+  {
+    title: "Safe Stay Girls PG",
+    description: "Secure PG near Vijay Nagar main road.",
+    location: "Vijay Nagar, Indore",
+    price: 8000,
+    gender: "Girls",
+    roomType: "Single",
+    amenities: ["WiFi", "AC", "Security"],
+    geometry: { geoJsonType: "Point", coordinates: [75.8920, 22.7520] },
+    images: [{ url: "https://images.unsplash.com/photo-1586375300773-8384e3e4916f" }]
+}
+,
+  {
+    title: "Budget Boys Hostel",
+    description: "Cheap hostel near Bhawarkua market.",
+    location: "Bhawarkua, Indore",
+    price: 3500,
+    gender: "Boys",
+    roomType: "Triple",
+    amenities: ["Mess"],
+    geometry: { geoJsonType: "Point", coordinates: [75.9400, 22.7220] },
+    images: [{ url: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91" }]
+  }
 ];
 
-module.exports = { data: sampleListings };
+module.exports = indoreHostels;
+

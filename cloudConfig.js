@@ -10,8 +10,8 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "wanderlust_DEV",
-    allowedFormats: ["png", "jpg", "jpeg"], // ✅ make sure spelling is correct
+    folder: "hostel_listings", // naam change kar diya (optional)
+    allowed_formats: ["png", "jpg", "jpeg"], // ✅ correct key
   },
 });
 

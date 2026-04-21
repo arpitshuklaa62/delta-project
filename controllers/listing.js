@@ -2,10 +2,11 @@ const Listing = require("../models/listing");
 
 // INDEX
 module.exports.index = async (req, res) => {
-  let { search, category } = req.query;
+  let { search, category, roomType, furnishing, rent } = req.query;
 
   let query = {};
 
+  // 🔎 SEARCH
   if (search) {
     query.$or = [
       { title: { $regex: search, $options: "i" } },
@@ -14,14 +15,42 @@ module.exports.index = async (req, res) => {
     ];
   }
 
+  // 🏷 CATEGORY FILTER
   if (category) {
     query.category = category;
   }
 
-  const allListings = await Listing.find(query);
+  // 🛏 ROOM TYPE FILTER
+  if (roomType) {
+    query.roomType = roomType;
+  }
+
+  // 🛋 FURNISHING FILTER
+  if (furnishing) {
+    query.furnishing = furnishing;
+  }
+
+  // 💰 PRICE RANGE FILTER
+  if (rent) {
+    const range = rent.split("-");
+
+    if (range.length === 2) {
+      const min = parseInt(range[0]);
+      const max = parseInt(range[1]);
+
+      query.price = {
+        $gte: min,
+        $lte: max,
+      };
+    }
+  }
+
+  // DATABASE QUERY
+  const allListings = await Listing.find(query).sort({ price: 1 });
 
   res.render("listings/index.ejs", { allListings });
 };
+
 // NEW FORM
 module.exports.renderNewForm = (req, res) => {
   res.render("listings/new.ejs");
@@ -44,10 +73,8 @@ module.exports.showListing = async (req, res) => {
 };
 
 // CREATE LISTING
-
 module.exports.createListings = async (req, res) => {
   try {
-    // ✅ LOGIN CHECK
     if (!req.user) {
       req.flash("error", "You must be logged in!");
       return res.redirect("/login");
@@ -55,31 +82,26 @@ module.exports.createListings = async (req, res) => {
 
     const listingData = req.body.listing;
 
-    //  agar data hi nahi aaya
     if (!listingData) {
       req.flash("error", "Invalid listing data!");
       return res.redirect("/listings/new");
     }
 
-    //  GEO API CALL
+    // GEO LOCATION API
     const geoResponse = await fetch(
       `https://nominatim.openstreetmap.org/search?q=${listingData.location}&format=json&limit=1`,
       {
-        headers: {
-          "User-Agent": "wanderlust-app",
-        },
+        headers: { "User-Agent": "wanderlust-app" },
       }
     );
 
     const geoData = await geoResponse.json();
 
-    //  invalid location
     if (!geoData || geoData.length === 0) {
       req.flash("error", "Location not found!");
       return res.redirect("/listings/new");
     }
 
-    //  coordinates extract
     const lat = parseFloat(geoData[0].lat);
     const lon = parseFloat(geoData[0].lon);
 
@@ -88,27 +110,23 @@ module.exports.createListings = async (req, res) => {
       coordinates: [lon, lat],
     };
 
-    //  new listing
     const newListing = new Listing(listingData);
     newListing.owner = req.user._id;
 
-    //  image upload (if exists)
-    if (req.file) {
-      newListing.image = {
-        url: req.file.path,
-        filename: req.file.filename,
-      };
+    if (req.files && req.files.length > 0) {
+      newListing.images = req.files.map(file => ({
+        url: file.path,
+        filename: file.filename
+      }));
     }
 
     await newListing.save();
 
-    //  SUCCESS FLASH
     req.flash("success", "Successfully created a new listing!");
     res.redirect(`/listings/${newListing._id}`);
 
   } catch (err) {
     console.error(err);
-
     req.flash("error", "Something went wrong while creating listing!");
     res.redirect("/listings");
   }
@@ -124,26 +142,22 @@ module.exports.renderEditForm = async (req, res) => {
     return res.redirect("/listings");
   }
 
-  let originalImageUrl = listing.image.url;
-  originalImageUrl = originalImageUrl.replace(
-    "/uploads",
-    "/uploads/w_200,h_120,c_fill"
-  );
-
-  res.render("listings/edit.ejs", { listing, originalImageUrl });
+  res.render("listings/edit.ejs", { listing });
 };
 
 // UPDATE
 module.exports.updateListings = async (req, res) => {
   let { id } = req.params;
+
   let listing = await Listing.findByIdAndUpdate(id, {
     ...req.body.listing,
   });
 
-  if (typeof req.file !== "undefined") {
-    let url = req.file.path;
-    let filename = req.file.filename;
-    listing.image = { url, filename };
+  if (req.files && req.files.length > 0) {
+    listing.images = req.files.map(file => ({
+      url: file.path,
+      filename: file.filename
+    }));
     await listing.save();
   }
 
@@ -154,6 +168,7 @@ module.exports.updateListings = async (req, res) => {
 // DELETE
 module.exports.deleteListings = async (req, res) => {
   let { id } = req.params;
+
   await Listing.findByIdAndDelete(id);
 
   req.flash("success", "Successfully deleted the listing!");

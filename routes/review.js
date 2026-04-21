@@ -13,11 +13,16 @@ router.post(
   wrapAsync(reviewController.createReview)
 );
 
-router.delete(
-  "/:reviewId",
-  isLoggedIn,
-  isReviewAuthor,
-  wrapAsync(reviewController.destroyReview)
-);
+// DELETE REVIEW
+router.delete("/:reviewId", async (req, res) => {
+  let { id, reviewId } = req.params;
 
+  await Listing.findByIdAndUpdate(id, {
+    $pull: { reviews: reviewId }
+  });
+
+  await Review.findByIdAndDelete(reviewId);
+
+  res.redirect(`/listings/${id}`);
+});
 module.exports = router;

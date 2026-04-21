@@ -1,61 +1,107 @@
 <% layout("layouts/boilerplate.ejs") %>
+
 <div class="row mt-3">
   <div class="col-8 offset-2">
-    <h3>Edit Your Listing</h3>
+    <h3>Edit Your Hostel</h3>
 
-    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" novalidate class="needs-validation" 
-      enctype="multipart/form-data">
+    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
 
-      <br>
-
+      <!-- Title -->
       <div class="mb-3">
-        <label for="title" class="form-lable">Title </label>
+        <label class="form-label">Title</label>
         <input name="listing[title]" value="<%= listing.title %>" class="form-control" required/>
-        <div class="invalid-feedback">title looks good</div>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
+      </div>
+
+      <!-- Images -->
+      <div class="mb-3">
+        <p>Current Images</p>
+        <% if (listing.images && listing.images.length > 0) { %>
+          <div class="d-flex flex-wrap">
+            <% listing.images.forEach(img => { %>
+              <img 
+                src="<%= img.url %>" 
+                class="img-thumbnail me-2 mb-2"
+                style="max-height: 150px; max-width: 150px; object-fit: cover;"
+              />
+            <% }); %>
+          </div>
+        <% } else { %>
+          <p>No images uploaded yet.</p>
+        <% } %>
       </div>
 
       <div class="mb-3">
-        <label for="description" class="form-lable">Description </label>
-        <textarea name="listing[description]" class="form-control" required><%= listing.description  %></textarea>
-        <div class="invalid-feedback">Please enter a valid description</div>
+        <label class="form-label">Upload New Images (will replace existing ones)</label>
+        <input name="images" type="file" class="form-control" multiple /> 
       </div>
 
-      <!-- FIXED IMAGE -->
+      <!-- Price -->
       <div class="mb-3">
-        <p>Original Listing Image</p>
-        <img 
-          src="<%= originalImageUrl %>" 
-          class="img-fluid rounded shadow-sm"
-          style="max-height: 300px; object-fit: cover;"
-        />
+        <label class="form-label">Price</label>
+        <input name="listing[price]" type="number" value="<%= listing.price %>" class="form-control" required />
       </div>
 
+      <!-- Country -->
       <div class="mb-3">
-        <label for="image" class="form-lable">Upload New Image</label>
-        <input name="image" type="file" class="form-control" /> 
+        <label class="form-label">Country</label>
+        <input name="listing[country]" value="<%= listing.country %>" class="form-control" required/>
       </div>
 
-      <div class="row">
-        <div class="mb-3 col-md-4">
-          <label for="price" class="form-lable">Price </label>
-          <input name="listing[price]" type="number" value="<%= listing.price %>" class="form-control" required />
-          <div class="invalid-feedback">Price should be valid price</div>
-        </div>
-        
-        <div class="mb-3 col-md-8">
-          <label for="country" class="form-lable">Country </label>
-          <input name="listing[country]" value="<%= listing.country %>" class="form-control" required/>
-          <div class="invalid-feedback"> Country name should be valid</div>
-        </div>
-      </div>
-
+      <!-- Location -->
       <div class="mb-3">
-        <label for="location" class="form-lable">Location </label>
+        <label class="form-label">Location</label>
         <input name="listing[location]" value="<%= listing.location %>" class="form-control" required />
-        <div class="invalid-feedback">Location should be valid</div>
       </div>
 
-      <button class="btn btn-dark edit-btn mt-3">Edit</button>
+      <!-- ✅ Gender -->
+      <div class="mb-3">
+        <label class="form-label">Gender</label>
+        <select name="listing[gender]" class="form-control" required>
+          <option value="Boys" <%= listing.gender === "Boys" ? "selected" : "" %>>Boys</option>
+          <option value="Girls" <%= listing.gender === "Girls" ? "selected" : "" %>>Girls</option>
+          <option value="Both" <%= listing.gender === "Both" ? "selected" : "" %>>Both</option>
+        </select>
+      </div>
+
+      <!-- ✅ Room Type -->
+      <div class="mb-3">
+        <label class="form-label">Room Type</label>
+        <select name="listing[roomType]" class="form-control" required>
+          <option value="Single" <%= listing.roomType === "Single" ? "selected" : "" %>>Single</option>
+          <option value="Double" <%= listing.roomType === "Double" ? "selected" : "" %>>Double</option>
+          <option value="Triple" <%= listing.roomType === "Triple" ? "selected" : "" %>>Triple</option>
+        </select>
+      </div>
+
+      <!-- ✅ Amenities -->
+      <div class="mb-3">
+        <label class="form-label">Amenities</label><br>
+
+        <% const amenitiesList = ["WiFi", "Food", "AC", "Laundry", "Parking"]; %>
+
+        <% amenitiesList.forEach(item => { %>
+          <div class="form-check form-check-inline">
+            <input 
+              class="form-check-input" 
+              type="checkbox" 
+              name="listing[amenities]" 
+              value="<%= item %>"
+              <%= listing.amenities && listing.amenities.includes(item) ? "checked" : "" %>
+            >
+            <label class="form-check-label"><%= item %></label>
+          </div>
+        <% }) %>
+      </div>
+
+      <!-- Submit -->
+      <button class="btn btn-dark mt-3">Update</button>
+
     </form>
   </div>
 </div>
